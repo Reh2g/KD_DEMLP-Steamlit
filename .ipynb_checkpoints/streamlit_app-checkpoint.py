@@ -107,6 +107,24 @@ if uploadFile is not None:
     st.markdown(hide_img_fs, unsafe_allow_html=True)
     st.write("Image Uploaded Successfully")
 
+    input_shape = Conv4_A.input_shape[1:-1]
+    h, w = input_shape
+    
+    image_resized = cv2.resize(img, (w, h))
+    image_normalized = image_resized.astype('float32') / 255.0
+    image_normalized = np.expand_dims(image_normalized, axis=-1)
+    
+    sample_image_exp = np.expand_dims(image_normalized, axis=0)
+
+    pred_A = Conv4_A.predict(sample_image_exp)
+    pred_B = Conv4_B.predict(sample_image_exp)
+    
+    pred_A_class = np.argmax(pred_A[0])
+    confidence_A = pred_A[0][pred_A_class]
+    
+    pred_B_class = np.argmax(pred_B[0])
+    confidence_B = pred_B[0][pred_B_class]
+
     if st.button('Diagnosis'):
 #       X = Image.open(uploadFile)
 #       X = ImageOps.grayscale(X)
@@ -119,25 +137,7 @@ if uploadFile is not None:
 #       X = X.reshape(224, 224, 1)  # Adiciona a dimensão do canal
 #       test = X
 
-        input_shape = Conv4_A.input_shape[1:-1]
-        h, w = input_shape
-        
-        image_resized = cv2.resize(img, (w, h))
-        image_normalized = image_resized.astype('float32') / 255.0
-        image_normalized = np.expand_dims(image_normalized, axis=-1)
-        
-        sample_image_exp = np.expand_dims(image_normalized, axis=0)
-
 # Predição DE-MLP
-
-        pred_A = Conv4_A.predict(sample_image_exp)
-        pred_B = Conv4_B.predict(sample_image_exp)
-        
-        pred_A_class = np.argmax(pred_A[0])
-        confidence_A = pred_A[0][pred_A_class]
-        
-        pred_B_class = np.argmax(pred_B[0])
-        confidence_B = pred_B[0][pred_B_class]
         
         prediction, y_pred = DEMLP_predict(sample_image_exp, Conv4_A, Conv4_B, DEMLP)
 
