@@ -104,8 +104,8 @@ if uploadFile is not None:
     '''
 
     if st.button('Diagnosis'):
-#       X = Image.open(uploadFile)
-#       X = ImageOps.grayscale(X)
+        X = Image.open(uploadFile)
+        X = ImageOps.grayscale(X)
 #       X = X.resize([224,224])
 #       X = np.array(X)
 #       X = X / 255.0
@@ -116,7 +116,7 @@ if uploadFile is not None:
 #       test = X
 
 # Predição DE-MLP
-        img_array = np.array(img)
+        img_array = np.array(X)
         
         st.markdown(hide_img_fs, unsafe_allow_html=True)
         st.write("Image Uploaded Successfully")
