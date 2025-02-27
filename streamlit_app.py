@@ -119,7 +119,7 @@ if uploadFile is not None:
 #       test.append(X)
 #       test = np.array(test)
         X = X.reshape(224, 224, 1)  # Adiciona a dimensão do canal
-        test = np.array([X])        # Shape (1, 224, 224, 1)
+        test = X
 
         prediction, y_pred = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
 
