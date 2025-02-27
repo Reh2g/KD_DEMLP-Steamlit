@@ -17,7 +17,7 @@ st.header("Upload a coronal CT image to be diagnosed", divider="gray")
 
 Conv4_A = tf.keras.models.load_model('model_Conv4_A.keras')
 Conv4_B = tf.keras.models.load_model('model_Conv4_B.keras')
-DEMLP + tf.keras.models.load_model('model_DEMLP.keras')
+DEMLP = tf.keras.models.load_model('model_DEMLP.keras')
 
 uploadFile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
 
