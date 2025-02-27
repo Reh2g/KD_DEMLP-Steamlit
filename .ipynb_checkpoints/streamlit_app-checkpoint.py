@@ -120,8 +120,6 @@ if uploadFile is not None:
         test = np.array(test)
 
         prediction, y_pred = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
-        print(prediction)
-        print(y_pred)
         if(y_pred[0] == 0):
             st.subheader("Positive")
             st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of containing a kidney stone."))
