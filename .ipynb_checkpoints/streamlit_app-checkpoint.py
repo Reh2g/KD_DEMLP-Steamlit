@@ -10,8 +10,8 @@ import cv2
 def load_image(img):
     im = Image.open(img)
     im = im.resize([224,224])
-    image = np.array(im)
-    return image
+#   image = np.array(im)
+    return im
 
 st.title("Kidney Stone Detection from Coronal CT Images")
 st.header("Upload a coronal CT image to be diagnosed", divider="gray")
