@@ -5,6 +5,7 @@ from matplotlib import cm
 import numpy as np
 import streamlit as st
 import tensorflow as tf
+import cv2
 
 def load_image(img):
     im = Image.open(img)
