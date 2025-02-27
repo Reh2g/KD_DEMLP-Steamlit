@@ -91,10 +91,10 @@ def DEMLP_predict(input_img, model_A, model_B, model_DEMLP):
     img_features = np.column_stack((img_features_A, img_features_B))
     img_features = img_features.reshape(img_features.shape[0], -1)
 
-    pred_labels_DEMLP = model_DEMLP.predict(img_features)
-    pred_class_labels_DEMLP = np.argmax(pred_labels_DEMLP, axis=1)
+    pred_confidence_DEMLP = model_DEMLP.predict(img_features)
+    pred_class_labels_DEMLP = np.argmax(pred_confidence_DEMLP, axis=1)
 
-    return pred_class_labels_DEMLP
+    return pred_confidence_DEMLP, pred_class_labels_DEMLP
 
 if uploadFile is not None:
     img = load_image(uploadFile)
@@ -119,26 +119,13 @@ if uploadFile is not None:
         test.append(X)
         test = np.array(test)
 
-        correct_model = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
-
-        if(correct_model == 0):
-            heatmap_image = generate_heatmap(Conv4_A, test)
-            st.image(heatmap_image)
-
-            prediction = Conv4_A.predict(test)
-            y_pred = np.argmax(prediction, axis=1)
-        elif(correct_model == 1):
-            heatmap_image = generate_heatmap(Conv4_B, test)
-            st.image(heatmap_image)
-
-            prediction = Conv4_B.predict(test)
-            y_pred = np.argmax(prediction, axis=1)
+        prediction, y_pred = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
 
         if(y_pred == 0):
             st.subheader("Positive")
-            st.write("This image has a " + str("{:.2f}".format(prediction[0][0]*100)+"% probability of containing a kidney stone."))
+            st.write("This image has a " + str("{:.2f}".format(prediction*100)+"% probability of containing a kidney stone."))
         elif(y_pred == 1):
             st.subheader("Negative")
-            st.write("This image has a " + str("{:.2f}".format(prediction[0][1]*100)+"% probability of not containing a kidney stone."))    
+            st.write("This image has a " + str("{:.2f}".format(prediction*100)+"% probability of not containing a kidney stone."))    
 else:
     st.write("Make sure you image is in JPG/PNG Format.")
