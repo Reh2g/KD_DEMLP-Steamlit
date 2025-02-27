@@ -114,7 +114,6 @@ if uploadFile is not None:
         X = ImageOps.grayscale(X)
         X = X.resize([224,224])
         X = np.array(X)
-        X = X.reshape((224, 224, 1))
         X = X / 255.0
         test = []
         test.append(X)
