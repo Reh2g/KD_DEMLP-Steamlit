@@ -120,16 +120,18 @@ if uploadFile is not None:
         
         st.markdown(hide_img_fs, unsafe_allow_html=True)
         st.write("Image Uploaded Successfully")
-    
+        
         input_shape = Conv4_A.input_shape[1:-1]
         h, w = input_shape
         
         image_resized = cv2.resize(img_array, (w, h))
         image_normalized = image_resized.astype('float32') / 255.0
         image_normalized = np.expand_dims(image_normalized, axis=-1)
+        print(image_normalized)
         
         sample_image_exp = np.expand_dims(image_normalized, axis=0)
-    
+        print(sample_image_exp)
+        
         pred_A = Conv4_A.predict(sample_image_exp)
         pred_B = Conv4_B.predict(sample_image_exp)
         
