@@ -1,6 +1,6 @@
 from PIL import Image, ImageOps
 from keras.models import load_model
-from matplotlib import cm
+from matplotlib
 
 import numpy as np
 import streamlit as st
@@ -79,21 +79,21 @@ def generate_heatmap(model, sample_image):
 
 def heatmap_models(model, image, nome):
     heatmap_image = generate_heatmap(model, image)
-    cm.pyplot.figure(figsize=(10, 5))
+    matplotlib.pyplot.figure(figsize=(10, 5))
 
-    cm.pyplot.subplot(1, 2, 1)
-    cm.pyplot.imshow(image.squeeze(), cmap='gray')
-    cm.pyplot.title('Original')
-    cm.pyplot.axis('off')
+    matplotlib.pyplot.subplot(1, 2, 1)
+    matplotlib.pyplot.imshow(image.squeeze(), cmap='gray')
+    matplotlib.pyplot.title('Original')
+    matplotlib.pyplot.axis('off')
     
-    cm.pyplot.subplot(1, 2, 2)
-    cm.pyplot.imshow(heatmap_image)
-    cm.pyplot.title(f'DE-MLP: Conv4 {nome}')
-    cm.pyplot.axis('off')
+    matplotlib.pyplot.subplot(1, 2, 2)
+    matplotlib.pyplot.imshow(heatmap_image)
+    matplotlib.pyplot.title(f'DE-MLP: Conv4 {nome}')
+    matplotlib.pyplot.axis('off')
 
-    cm.pyplot.tight_layout()
-    cm.pyplot.savefig(output_path)
-    cm.pyplot.show()
+    matplotlib.pyplot.tight_layout()
+    matplotlib.pyplot.savefig(output_path)
+    matplotlib.pyplot.show()
 
 def DEMLP_predict(input_img, model_A, model_B, model_DEMLP):
     dense_output_A = model_A.get_layer('dense').output
