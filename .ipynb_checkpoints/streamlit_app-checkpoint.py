@@ -24,7 +24,7 @@ uploadFile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
 def generate_heatmap(model, sample_image):
     sample_image_exp = np.expand_dims(sample_image, axis=0)
 
-    intermediate_model = Model(inputs=model.input, outputs=model.get_layer('last_conv').output)
+    intermediate_model = tf.keras.models.Model(inputs=model.input, outputs=model.get_layer('last_conv').output)
     activations = intermediate_model.predict(sample_image_exp)
     activations = tf.convert_to_tensor(activations)
 
