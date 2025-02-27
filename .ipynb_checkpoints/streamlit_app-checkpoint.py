@@ -135,10 +135,10 @@ if uploadFile is not None:
         pred_Conv4_B = Conv4_B.predict(test)
         
         pred_Conv4_A_class = np.argmax(pred_Conv4_A[0])
-        confidence_A = pred_model_A[0][pred_Conv4_A_class]
+        confidence_A = pred_Conv4_A[0][pred_Conv4_A_class]
         
         pred_Conv4_B_class = np.argmax(pred_Conv4_B[0])
-        confidence_B = pred_model_B[0][pred_Conv4_B_class]
+        confidence_B = pred_Conv4_B[0][pred_Conv4_B_class]
 
         if confidence_A >= confidence_B:
             heatmap_image = generate_heatmap(Conv4_A, test)
