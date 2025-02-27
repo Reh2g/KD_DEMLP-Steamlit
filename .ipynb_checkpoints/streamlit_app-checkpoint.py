@@ -10,7 +10,6 @@ import cv2
 def load_image(img):
     im = Image.open(img)
     im = im.resize([224,224])
-#   image = np.array(im)
     return im
 
 st.title("Kidney Stone Detection from Coronal CT Images")
@@ -117,7 +116,7 @@ if uploadFile is not None:
 #       test = X
 
 # Predição DE-MLP
-        img_array = np.array(im)
+        img_array = np.array(img)
         
         st.markdown(hide_img_fs, unsafe_allow_html=True)
         st.write("Image Uploaded Successfully")
