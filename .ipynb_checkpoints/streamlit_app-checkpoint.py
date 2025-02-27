@@ -106,16 +106,7 @@ if uploadFile is not None:
     if st.button('Diagnosis'):
         X = Image.open(uploadFile)
         X = ImageOps.grayscale(X)
-#       X = X.resize([224,224])
-#       X = np.array(X)
-#       X = X / 255.0
-#-#     test = []
-#-#     test.append(X)
-#-#     test = np.array(test)
-#       X = X.reshape(224, 224, 1)  # Adiciona a dimensão do canal
-#       test = X
 
-# Predição DE-MLP
         img_array = np.array(X)
         
         st.markdown(hide_img_fs, unsafe_allow_html=True)
@@ -126,20 +117,11 @@ if uploadFile is not None:
         
         image_resized = cv2.resize(img_array, (w, h))
         image_normalized = image_resized.astype('float32') / 255.0
+        
         image_normalized = np.expand_dims(image_normalized, axis=-1)
-        print(image_normalized)
-        
         sample_image_exp = np.expand_dims(image_normalized, axis=0)
-        print(sample_image_exp)
-        
-        pred_A = Conv4_A.predict(sample_image_exp)
-        pred_B = Conv4_B.predict(sample_image_exp)
-        
-        pred_A_class = np.argmax(pred_A[0])
-        confidence_A = pred_A[0][pred_A_class]
-        
-        pred_B_class = np.argmax(pred_B[0])
-        confidence_B = pred_B[0][pred_B_class]
+
+# Predição DE-MLP
         
         prediction, y_pred = DEMLP_predict(sample_image_exp, Conv4_A, Conv4_B, DEMLP)
 
