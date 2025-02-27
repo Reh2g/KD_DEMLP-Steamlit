@@ -77,23 +77,6 @@ def generate_heatmap(model, sample_image):
     
     return image_rgba
 
-def heatmap_models(model, image, nome):
-    heatmap_image = generate_heatmap(model, image)
-    matplotlib.pyplot.figure(figsize=(10, 5))
-
-    matplotlib.pyplot.subplot(1, 2, 1)
-    matplotlib.pyplot.imshow(image.squeeze(), cmap='gray')
-    matplotlib.pyplot.title('Original')
-    matplotlib.pyplot.axis('off')
-    
-    matplotlib.pyplot.subplot(1, 2, 2)
-    matplotlib.pyplot.imshow(heatmap_image)
-    matplotlib.pyplot.title(f'DE-MLP: Conv4 {nome}')
-    matplotlib.pyplot.axis('off')
-
-    matplotlib.pyplot.tight_layout()
-    matplotlib.pyplot.show()
-
 def DEMLP_predict(input_img, model_A, model_B, model_DEMLP):
     dense_output_A = model_A.get_layer('dense').output
     model_A_extractor = tf.keras.models.Model(inputs=model_A.input, outputs=dense_output_A)
@@ -129,7 +112,7 @@ if uploadFile is not None:
         X = ImageOps.grayscale(X)
         X = X.resize([224,224])
         X = np.array(X)
-        X = X.reshape((224, 224, 1))  # Add channel dimension
+        X = X.reshape((224, 224, 1))
         X = X / 255.0
         test = []
         test.append(X)
@@ -137,13 +120,15 @@ if uploadFile is not None:
 
         correct_model = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
 
-        if correct_model == 0:
-            heatmap_models(Conv4_A, test, 'A')
+        if(correct_model == 0):
+            heatmap_image = generate_heatmap(Conv4_A, test)
+            st.image(heatmap_image)
 
             prediction = Conv4_A.predict(test)
             y_pred = np.argmax(prediction, axis=1)
-        elif correct_model == 1:
-            heatmap_models(Conv4_B, test, 'B')
+        elif(correct_model == 1):
+            heatmap_image = generate_heatmap(Conv4_B, test)
+            st.image(heatmap_image)
 
             prediction = Conv4_B.predict(test)
             y_pred = np.argmax(prediction, axis=1)
