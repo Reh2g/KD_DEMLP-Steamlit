@@ -5,6 +5,7 @@ from matplotlib import cm
 import numpy as np
 import streamlit as st
 import tensorflow as tf
+import cv2
 
 def load_image(img):
     im = Image.open(img)
@@ -59,10 +60,8 @@ def generate_heatmap(model, sample_image):
     heatmap = (heatmap - min_value) / (max_value - min_value)
     heatmap = np.asarray(heatmap)
     heatmap = (heatmap - 1) * (-1)
-    heatmap = np.reshape(heatmap, (sample_image.shape[1], sample_image.shape[0]))
-    
-    heatmap_image = Image.fromarray(heatmap)
-    heatmap_resized = heatmap_image.resize(heatmap, (sample_image.shape[1], sample_image.shape[0]))
+
+    heatmap_resized = cv2.resize(heatmap, (sample_image.shape[1], sample_image.shape[0]))
     heatmap_resized = np.uint8(255 * heatmap_resized)
     
     heatmap_colored = cm.jet(heatmap_resized)[:, :, :3]
