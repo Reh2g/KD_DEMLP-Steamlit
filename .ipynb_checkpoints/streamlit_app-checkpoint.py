@@ -111,17 +111,27 @@ if uploadFile is not None:
 
     if st.button('Diagnosis'):
         X = Image.open(uploadFile)
-        X = ImageOps.grayscale(X)
-        X = X.resize([224,224])
-        X = np.array(X)
-        X = X / 255.0
-#       test = []
-#       test.append(X)
-#       test = np.array(test)
-        X = X.reshape(224, 224, 1)  # Adiciona a dimensão do canal
-        test = X
+#       X = ImageOps.grayscale(X)
+#       X = X.resize([224,224])
+#       X = np.array(X)
+#       X = X / 255.0
+#-#     test = []
+#-#     test.append(X)
+#-#     test = np.array(test)
+#       X = X.reshape(224, 224, 1)  # Adiciona a dimensão do canal
+#       test = X
 
-        prediction, y_pred = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
+        input_shape = Conv4_A.input_shape[1:-1]  # Assume (None, altura, largura, canais)
+        h, w = input_shape
+        
+        # Redimensionar e normalizar a imagem
+        image_resized = cv2.resize(X, (w, h))
+        image_normalized = image_resized.astype('float32') / 255.0
+        image_normalized = np.expand_dims(image_normalized, axis=-1)  # Adicionar canal
+        
+        sample_image_exp = np.expand_dims(image_normalized, axis=0)
+
+        prediction, y_pred = DEMLP_predict(sample_image_exp, Conv4_A, Conv4_B, DEMLP)
 
         print(prediction.max())
         print(y_pred[0])
@@ -133,8 +143,8 @@ if uploadFile is not None:
             st.subheader("Healthy")
             st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of being healthy."))
 
-        pred_Conv4_A = Conv4_A.predict(test)
-        pred_Conv4_B = Conv4_B.predict(test)
+        pred_Conv4_A = Conv4_A.predict(sample_image_exp)
+        pred_Conv4_B = Conv4_B.predict(sample_image_exp)
         
         pred_Conv4_A_class = np.argmax(pred_Conv4_A[0])
         confidence_A = pred_Conv4_A[0][pred_Conv4_A_class]
