@@ -115,9 +115,11 @@ if uploadFile is not None:
         X = X.resize([224,224])
         X = np.array(X)
         X = X / 255.0
-        test = []
-        test.append(X)
-        test = np.array(test)
+#       test = []
+#       test.append(X)
+#       test = np.array(test)
+        X = X.reshape(224, 224, 1)  # Adiciona a dimensão do canal
+        test = np.array([X])        # Shape (1, 224, 224, 1)
 
         prediction, y_pred = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
 
@@ -125,11 +127,11 @@ if uploadFile is not None:
         print(y_pred[0])
         
         if(y_pred[0] == 0):
-            st.subheader("Positive")
+            st.subheader("Kidney Stone")
             st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of containing a kidney stone."))
-        elif(y_pred[0] == 1):
-            st.subheader("Negative")
-            st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability to be healthy."))
+        else:
+            st.subheader("Healthy")
+            st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of being healthy."))
 
         pred_Conv4_A = Conv4_A.predict(test)
         pred_Conv4_B = Conv4_B.predict(test)
@@ -142,7 +144,7 @@ if uploadFile is not None:
 
         if confidence_A >= confidence_B:
             heatmap_image = generate_heatmap(Conv4_A, test)
-        elif confidence_B > confidence_A:
+        else:
             heatmap_image = generate_heatmap(Conv4_A, test)
 
         st.image(heatmap_image)
