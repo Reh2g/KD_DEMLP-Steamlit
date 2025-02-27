@@ -29,16 +29,16 @@ for layer in DEMLP.layers:
 
 uploadFile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
 
-def generate_heatmap(model, sample_image_exp):
+def generate_heatmap(model, sample_image):
     intermediate_model = tf.keras.models.Model(inputs=model.input, outputs=model.get_layer('last_conv').output)
-    activations = intermediate_model.predict(sample_image_exp)
+    activations = intermediate_model.predict(sample_image)
     activations = tf.convert_to_tensor(activations)
 
-    predictions = model.predict(sample_image_exp)
+    predictions = model.predict(sample_image)
 
     with tf.GradientTape() as tape:
         iterate = tf.keras.models.Model([model.input], [model.output, model.get_layer('last_conv').output])
-        model_out, last_conv_layer = iterate(sample_image_exp)
+        model_out, last_conv_layer = iterate(sample_image)
         class_out = model_out[:, np.argmax(model_out[0])]
         tape.watch(last_conv_layer)
         grads = tape.gradient(class_out, last_conv_layer)
@@ -79,21 +79,21 @@ def generate_heatmap(model, sample_image_exp):
 
 def heatmap_models(model, image, nome):
     heatmap_image = generate_heatmap(model, image)
-    plt.figure(figsize=(10, 5))
+    cm.pyplot.figure(figsize=(10, 5))
 
-    plt.subplot(1, 2, 1)
-    plt.imshow(image.squeeze(), cmap='gray')
-    plt.title('Original')
-    plt.axis('off')
+    cm.pyplot.subplot(1, 2, 1)
+    cm.pyplot.imshow(image.squeeze(), cmap='gray')
+    cm.pyplot.title('Original')
+    cm.pyplot.axis('off')
     
-    plt.subplot(1, 2, 2)
-    plt.imshow(heatmap_image)
-    plt.title(f'DE-MLP: Conv4 {nome}')
-    plt.axis('off')
+    cm.pyplot.subplot(1, 2, 2)
+    cm.pyplot.imshow(heatmap_image)
+    cm.pyplot.title(f'DE-MLP: Conv4 {nome}')
+    cm.pyplot.axis('off')
 
-    plt.tight_layout()
-    plt.savefig(output_path)
-    plt.show()
+    cm.pyplot.tight_layout()
+    cm.pyplot.savefig(output_path)
+    cm.pyplot.show()
 
 def DEMLP_predict(input_img, model_A, model_B, model_DEMLP):
     dense_output_A = model_A.get_layer('dense').output
