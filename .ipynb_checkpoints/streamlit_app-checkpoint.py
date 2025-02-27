@@ -123,7 +123,7 @@ if uploadFile is not None:
         if(y_pred[0] == 0):
             st.subheader("Positive")
             st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of containing a kidney stone."))
-        elif(y_pred[0] == 1):
+        if(y_pred[0] == 1):
             st.subheader("Negative")
             st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of not containing a kidney stone."))    
 else:
