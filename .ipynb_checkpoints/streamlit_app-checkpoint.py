@@ -121,7 +121,7 @@ if uploadFile is not None:
 
         prediction, y_pred = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
 
-        print(prediction)
+        print(prediction.max())
         print(y_pred[0])
         
         if(y_pred[0] == 0):
