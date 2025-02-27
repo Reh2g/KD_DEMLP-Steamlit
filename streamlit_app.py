@@ -24,8 +24,6 @@ for layer in Conv4_A.layers:
     layer.trainable = False
 for layer in Conv4_B.layers:
     layer.trainable = False
-for layer in DEMLP.layers:
-    layer.trainable = False
 
 uploadFile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
 
