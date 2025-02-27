@@ -19,10 +19,18 @@ Conv4_A = tf.keras.models.load_model('model_Conv4_A.keras')
 Conv4_B = tf.keras.models.load_model('model_Conv4_B.keras')
 DEMLP = tf.keras.models.load_model('model_DEMLP.keras')
 
+for layer in Conv4_A.layers:
+    layer.trainable = False
+for layer in Conv4_B.layers:
+    layer.trainable = False
+for layer in DEMLP.layers:
+    layer.trainable = False
+
 uploadFile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
 
 def generate_heatmap(model, sample_image):
-    sample_image_exp = np.expand_dims(sample_image, axis=0)
+#   sample_image_exp = np.expand_dims(sample_image, axis=0)
+    sample_image_exp = sample_image
 
     intermediate_model = tf.keras.models.Model(inputs=model.input, outputs=model.get_layer('last_conv').output)
     activations = intermediate_model.predict(sample_image_exp)
@@ -124,6 +132,7 @@ if uploadFile is not None:
         X = ImageOps.grayscale(X)
         X = X.resize([224,224])
         X = np.array(X)
+        X = X.reshape((224, 224, 1))  # Add channel dimension
         X = X / 255.0
         test = []
         test.append(X)
