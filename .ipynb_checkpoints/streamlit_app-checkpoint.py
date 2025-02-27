@@ -91,9 +91,9 @@ def heatmap_models(model, image, nome):
 
 def DEMLP_predict(input_img, model_A, model_B, model_DEMLP):
     dense_output_A = model_A.get_layer('dense').output
-    model_A_extractor = Model(inputs=model_A.input, outputs=dense_output_A)
+    model_A_extractor = tf.keras.models.Model(inputs=model_A.input, outputs=dense_output_A)
     dense_output_B = model_B.get_layer('dense').output
-    model_B_extractor = Model(inputs=model_B.input, outputs=dense_output_B)
+    model_B_extractor = tf.keras.models.Model(inputs=model_B.input, outputs=dense_output_B)
 
     img_features_A = model_A_extractor.predict(input_img)
     img_features_B = model_B_extractor.predict(input_img)
