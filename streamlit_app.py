@@ -59,6 +59,7 @@ def generate_heatmap(model, sample_image):
     heatmap = (heatmap - min_value) / (max_value - min_value)
     heatmap = np.asarray(heatmap)
     heatmap = (heatmap - 1) * (-1)
+    heatmap = np.reshape(heatmap, (sample_image.shape[1], sample_image.shape[0]))
     
     heatmap_image = Image.fromarray(heatmap)
     heatmap_resized = heatmap_image.resize(heatmap, (sample_image.shape[1], sample_image.shape[0]))
