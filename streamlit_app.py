@@ -129,6 +129,15 @@ if uploadFile is not None:
         sample_image_exp = np.expand_dims(image_normalized, axis=0)
 
 # Predição DE-MLP
+
+        pred_A = Conv4_A.predict(sample_image_exp)
+        pred_B = Conv4_B.predict(sample_image_exp)
+        
+        pred_A_class = np.argmax(pred_A[0])
+        confidence_A = pred_A[0][pred_A_class]
+        
+        pred_B_class = np.argmax(pred_B[0])
+        confidence_B = pred_B[0][pred_B_class]
         
         prediction, y_pred = DEMLP_predict(sample_image_exp, Conv4_A, Conv4_B, DEMLP)
 
