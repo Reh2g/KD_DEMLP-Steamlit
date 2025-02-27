@@ -60,7 +60,8 @@ def generate_heatmap(model, sample_image):
     heatmap = np.asarray(heatmap)
     heatmap = (heatmap - 1) * (-1)
     
-    heatmap_resized = heatmap.resize(heatmap, (sample_image.shape[1], sample_image.shape[0]))
+    heatmap_image = Image.fromarray(heatmap)
+    heatmap_resized = heatmap_image.resize(heatmap, (sample_image.shape[1], sample_image.shape[0]))
     heatmap_resized = np.uint8(255 * heatmap_resized)
     
     heatmap_colored = cm.jet(heatmap_resized)[:, :, :3]
