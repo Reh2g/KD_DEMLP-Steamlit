@@ -39,7 +39,7 @@ def generate_heatmap(model, sample_image):
     predictions = model.predict(sample_image_exp)
 
     with tf.GradientTape() as tape:
-        iterate = Model([model.input], [model.output, model.get_layer('last_conv').output])
+        iterate = tf.keras.models.Model([model.input], [model.output, model.get_layer('last_conv').output])
         model_out, last_conv_layer = iterate(sample_image_exp)
         class_out = model_out[:, np.argmax(model_out[0])]
         tape.watch(last_conv_layer)
