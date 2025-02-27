@@ -124,9 +124,9 @@ if uploadFile is not None:
         print(y_pred)
         if(y_pred[0] == 0):
             st.subheader("Positive")
-            st.write("This image has a " + str("{:.2f}".format(prediction[0]*100)+"% probability of containing a kidney stone."))
+            st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of containing a kidney stone."))
         elif(y_pred[0] == 1):
             st.subheader("Negative")
-            st.write("This image has a " + str("{:.2f}".format(prediction[0]*100)+"% probability of not containing a kidney stone."))    
+            st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of not containing a kidney stone."))    
 else:
     st.write("Make sure you image is in JPG/PNG Format.")
