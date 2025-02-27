@@ -129,25 +129,24 @@ if uploadFile is not None:
         test.append(X)
         test = np.array(test)
 
-        for(i in test):
-            correct_model = DEMLP_predict(test[i], Conv4_A, Conv4_B, DEMLP)
+        correct_model = DEMLP_predict(test, Conv4_A, Conv4_B, DEMLP)
 
-            if correct_model == 0:
-                heatmap_models(Conv4_A, test[i], 'A')
+        if correct_model == 0:
+            heatmap_models(Conv4_A, test, 'A')
 
-                prediction = Conv4_A.predict(test[i])
-                y_pred = np.argmax(prediction, axis=1)
-            elif correct_model == 1:
-                heatmap_models(Conv4_B, test[i], 'B')
+            prediction = Conv4_A.predict(test)
+            y_pred = np.argmax(prediction, axis=1)
+        elif correct_model == 1:
+            heatmap_models(Conv4_B, test, 'B')
 
-                prediction = Conv4_B.predict(test[i])
-                y_pred = np.argmax(prediction, axis=1)
+            prediction = Conv4_B.predict(test)
+            y_pred = np.argmax(prediction, axis=1)
 
-            if(y_pred == 0):
-                st.subheader("Positive")
-                st.write("This image has a " + str("{:.2f}".format(prediction[0][0]*100)+"% probability of containing a kidney stone."))
-            elif(y_pred == 1):
-                st.subheader("Negative")
-                st.write("This image has a " + str("{:.2f}".format(prediction[0][1]*100)+"% probability of not containing a kidney stone."))    
+        if(y_pred == 0):
+            st.subheader("Positive")
+            st.write("This image has a " + str("{:.2f}".format(prediction[0][0]*100)+"% probability of containing a kidney stone."))
+        elif(y_pred == 1):
+            st.subheader("Negative")
+            st.write("This image has a " + str("{:.2f}".format(prediction[0][1]*100)+"% probability of not containing a kidney stone."))    
 else:
     st.write("Make sure you image is in JPG/PNG Format.")
