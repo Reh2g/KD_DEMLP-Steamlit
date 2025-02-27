@@ -127,8 +127,24 @@ if uploadFile is not None:
         if(y_pred[0] == 0):
             st.subheader("Positive")
             st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of containing a kidney stone."))
-        if(y_pred[0] == 1):
+        elif(y_pred[0] == 1):
             st.subheader("Negative")
             st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability to be healthy."))
+
+        pred_Conv4_A = Conv4_A.predict(test)
+        pred_Conv4_B = Conv4_B.predict(test)
+        
+        pred_Conv4_A_class = np.argmax(pred_Conv4_A[0])
+        confidence_A = pred_model_A[0][pred_Conv4_A_class]
+        
+        pred_Conv4_B_class = np.argmax(pred_Conv4_B[0])
+        confidence_B = pred_model_B[0][pred_Conv4_B_class]
+
+        if confidence_A >= confidence_B:
+            heatmap_image = generate_heatmap(Conv4_A, test)
+        elif confidence_B > confidence_A:
+            heatmap_image = generate_heatmap(Conv4_A, test)
+
+        st.image(heatmap_image)
 else:
     st.write("Make sure you image is in JPG/PNG Format.")
