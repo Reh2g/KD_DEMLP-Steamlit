@@ -92,7 +92,6 @@ def heatmap_models(model, image, nome):
     matplotlib.pyplot.axis('off')
 
     matplotlib.pyplot.tight_layout()
-    matplotlib.pyplot.savefig(output_path)
     matplotlib.pyplot.show()
 
 def DEMLP_predict(input_img, model_A, model_B, model_DEMLP):
