@@ -110,7 +110,7 @@ if uploadFile is not None:
     st.write("Image Uploaded Successfully")
 
     if st.button('Diagnosis'):
-        X = Image.open(uploadFile)
+#       X = Image.open(uploadFile)
 #       X = ImageOps.grayscale(X)
 #       X = X.resize([224,224])
 #       X = np.array(X)
@@ -121,16 +121,17 @@ if uploadFile is not None:
 #       X = X.reshape(224, 224, 1)  # Adiciona a dimensão do canal
 #       test = X
 
-        input_shape = Conv4_A.input_shape[1:-1]  # Assume (None, altura, largura, canais)
+        input_shape = Conv4_A.input_shape[1:-1]
         h, w = input_shape
         
-        # Redimensionar e normalizar a imagem
-        image_resized = cv2.resize(X, (w, h))
+        image_resized = cv2.resize(img, (w, h))
         image_normalized = image_resized.astype('float32') / 255.0
-        image_normalized = np.expand_dims(image_normalized, axis=-1)  # Adicionar canal
+        image_normalized = np.expand_dims(image_normalized, axis=-1)
         
         sample_image_exp = np.expand_dims(image_normalized, axis=0)
 
+# Predição DE-MLP
+        
         prediction, y_pred = DEMLP_predict(sample_image_exp, Conv4_A, Conv4_B, DEMLP)
 
         print(prediction.max())
@@ -143,6 +144,8 @@ if uploadFile is not None:
             st.subheader("Healthy")
             st.write("This image has a " + str("{:.2f}".format(prediction[0].max()*100)+"% probability of being healthy."))
 
+# Predições Conv4
+        
         pred_Conv4_A = Conv4_A.predict(sample_image_exp)
         pred_Conv4_B = Conv4_B.predict(sample_image_exp)
         
@@ -152,10 +155,12 @@ if uploadFile is not None:
         pred_Conv4_B_class = np.argmax(pred_Conv4_B[0])
         confidence_B = pred_Conv4_B[0][pred_Conv4_B_class]
 
+# Heatmap
+
         if confidence_A >= confidence_B:
-            heatmap_image = generate_heatmap(Conv4_A, test)
+            heatmap_image = generate_heatmap(Conv4_A, image_normalized)
         else:
-            heatmap_image = generate_heatmap(Conv4_A, test)
+            heatmap_image = generate_heatmap(Conv4_A, image_normalized)
 
         st.image(heatmap_image)
 else:
