@@ -1,7 +1,7 @@
 from PIL import Image, ImageOps
 from keras.models import load_model
-from matplotlib
 
+import matplotlib
 import numpy as np
 import streamlit as st
 import tensorflow as tf
