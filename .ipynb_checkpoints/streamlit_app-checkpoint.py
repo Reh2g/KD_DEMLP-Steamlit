@@ -30,15 +30,17 @@ for layer in DEMLP.layers:
 uploadFile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
 
 def generate_heatmap(model, sample_image):
+    sample_image_exp = np.expand_dims(sample_image, axis=0)
+    
     intermediate_model = tf.keras.models.Model(inputs=model.input, outputs=model.get_layer('last_conv').output)
-    activations = intermediate_model.predict(sample_image)
+    activations = intermediate_model.predict(sample_image_exp)
     activations = tf.convert_to_tensor(activations)
 
-    predictions = model.predict(sample_image)
+    predictions = model.predict(sample_image_exp)
 
     with tf.GradientTape() as tape:
         iterate = tf.keras.models.Model([model.input], [model.output, model.get_layer('last_conv').output])
-        model_out, last_conv_layer = iterate(sample_image)
+        model_out, last_conv_layer = iterate(sample_image_exp)
         class_out = model_out[:, np.argmax(model_out[0])]
         tape.watch(last_conv_layer)
         grads = tape.gradient(class_out, last_conv_layer)
